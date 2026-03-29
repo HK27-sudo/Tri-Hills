@@ -5,7 +5,9 @@
     <title>Tri Hills Basketball Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <style>.purple-gradient { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }</style>
+    <style>.purple-gradient { background: linear-gradient(135deg, #6d28d9 0%, #4c1d95 100%); }
+        
+    </style>
 </head>
 <body class="bg-gray-50 font-sans text-gray-900">
     <nav class="flex justify-between items-center px-10 py-5 bg-white shadow-sm sticky top-0 z-50">
@@ -53,7 +55,7 @@
                         <div id="data-display">Loading...</div>
 
                         <script>
-                        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxfelY4uhRqWDkBGdCJCMfariE6KNID3Jq2HtGl6mx9-kml1lGEGKZ2JLdxT3wcThBH/exec";
+                        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwurPYbHYA--_PjXYI9jV57s2Ax8jbDg8pXOtqmewlcZETE9OFNjtyObWu_eltw4Y1K/exec";
 
                         async function loadData() {
                             try {
@@ -65,8 +67,8 @@
                             // Map through the rows (e.g., Harsath Krishna, Center) 
                             container.innerHTML = data.map(row => `
                                 <div class="card">
-                                <h3>${row.title}</h3>
-                                <p> ${row.subtitle}</p>
+                                <h3>${row.title || ''}</h3>
+                                <p>${row.sub || row.subtitle || ''}</p>
                                 </div>
                             `).join('');
                             
@@ -77,21 +79,6 @@
 
                         loadData();
                         </script>
-                </div>
-            </div>
-        </div>
-    </section>
-
-        <section class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col items-center mb-12">
-                <h2 class="text-3xl font-bold">About Us</h2>
-            </div>
-                <div  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <div class="card">
-                        <h3>Video analysis</h3>
-                        <p>Each player is analyzed in detail to improve performance.</p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -128,6 +115,11 @@
         async function load() {
             const res = await fetch(URL);
             const data = await res.json();
+            console.log("Loaded achievements data", data);
+            if (!Array.isArray(data) || data.length === 0) {
+                document.getElementById('achievements-container').innerHTML = '<p class="text-gray-500">No achievements found. Please add from Admin.</p>';
+                return;
+            }
             document.getElementById('achievements-container').innerHTML = data.map(i => `
                 <div class="bg-white p-6 rounded-xl shadow-md border-b-4 border-purple-600">
                     <p class="text-purple-700 font-bold text-lg">${i.title}</p><p class="text-gray-500">${i.sub}</p>
